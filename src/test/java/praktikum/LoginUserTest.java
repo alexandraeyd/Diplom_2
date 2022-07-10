@@ -1,14 +1,12 @@
 package praktikum;
 
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 
 import static org.apache.http.HttpStatus.*;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class LoginUserTest {
@@ -21,27 +19,24 @@ public class LoginUserTest {
     public void setUp(){
         userClient = new UserClient();
         user = DataGenerator.getRandomUser();
-        ValidatableResponse loginResponse = userClient.register(user);
-//        String accessToken = loginResponse.extract().path("accessToken");
-//        String refreshToken = loginResponse.extract().path("refreshToken");
     }
 
     @Test
-    // @DisplayName("Check 201 status code and response for creating courier")
+    @DisplayName("Check that user can login with valid credentials")
     public void userCanLogInWithValidCredentials(){
-        ValidatableResponse createResponse = userClient.login(user);
-        int statusCode = createResponse.extract().statusCode();
-        assertEquals("User is not logged in", statusCode, SC_OK);
+        ValidatableResponse response = userClient.login(user);
+        int statusCode = response.extract().statusCode();
+        assertEquals("User is not logged in", SC_OK, statusCode);
 
     }
 
     @Test
-    // @DisplayName("Check 201 status code and response for creating courier")
+    @DisplayName("Check that user can not login with invalid password")
     public void userWithWrongPasswordCanNotLogIn(){
         user.setPassword("newpassword");
-        ValidatableResponse createResponse = userClient.login(user);
-        int statusCode = createResponse.extract().statusCode();
-        assertEquals("User logged in with wrong password", statusCode, SC_UNAUTHORIZED);
+        ValidatableResponse response = userClient.login(user);
+        int statusCode = response.extract().statusCode();
+        assertEquals("User logged in with wrong password", SC_UNAUTHORIZED, statusCode);
 
     }
 }

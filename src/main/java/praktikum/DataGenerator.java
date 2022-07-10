@@ -34,4 +34,24 @@ public class DataGenerator {
         }
         return new Order(orderIngredients);
     }
+
+    public static Order getRandomOrderWithInvalidIngredient() {
+        OrderClient orderClient = new OrderClient();
+        List<String> orderIngredients = new ArrayList<String>();
+        int maxIngredients = orderClient.getActualIngredients().size();
+        Random rn = new Random();
+        for (int i = 0; i < maxIngredients; i++) {
+            if (rn.nextBoolean()) {
+                orderIngredients.add(orderClient.getActualIngredients().get(i));
+            }
+        }
+        orderIngredients.add(RandomStringUtils.randomAlphabetic(10));
+        return new Order(orderIngredients);
+    }
+
+    public static Order getEmptyOrder() {
+        OrderClient orderClient = new OrderClient();
+        List<String> orderIngredients = new ArrayList<String>();
+        return new Order(orderIngredients);
+    }
 }

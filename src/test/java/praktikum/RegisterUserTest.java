@@ -1,22 +1,19 @@
 package praktikum;
 
 import io.restassured.response.ValidatableResponse;
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import io.qameta.allure.junit4.DisplayName;
 
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_FORBIDDEN;
 import static org.junit.Assert.assertEquals;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+
 
 public class RegisterUserTest {
 
     UserClient userClient;
     User user;
-    int userId;
 
     @Before
     public void setUp(){
@@ -25,35 +22,36 @@ public class RegisterUserTest {
     }
 
     @Test
-   // @DisplayName("Check 201 status code and response for creating courier")
+    @DisplayName("Check that new user can be registered")
     public void userCanBeRegistered(){
         user = DataGenerator.getRandomUser();
-        ValidatableResponse createResponse = userClient.register(user);
-        int statusCode = createResponse.extract().statusCode();
+        ValidatableResponse response = userClient.register(user);
+        int statusCode = response.extract().statusCode();
 
-        assertEquals("User is not registered", statusCode, SC_OK);
+        assertEquals("User is not registered",  SC_OK, statusCode);
     }
 
     @Test
+    @DisplayName("Check that existed user can not be registered")
     public void existedUserCanNotBeRegistered(){
         user = DataGenerator.getRandomUser();
         userClient.register(user);
         user.setName(user.getName()+"new");
         user.setPassword(user.getPassword()+"new");
 
-        ValidatableResponse createResponse = userClient.register(user);
-        int statusCode = createResponse.extract().statusCode();
+        ValidatableResponse response = userClient.register(user);
+        int statusCode = response.extract().statusCode();
 
-        assertEquals("User with existed email is registered", statusCode, SC_FORBIDDEN);
+        assertEquals("User with existed email is registered",  SC_FORBIDDEN, statusCode);
     }
 
     @Test
-    // @DisplayName("Check 201 status code and response for creating courier")
+    @DisplayName("Check that user can not be registered without name")
     public void userWithoutNAmeCanNotBeRegistered(){
         user = DataGenerator.getRandomCourierWithNullName();
-        ValidatableResponse createResponse = userClient.register(user);
-        int statusCode = createResponse.extract().statusCode();
+        ValidatableResponse response = userClient.register(user);
+        int statusCode = response.extract().statusCode();
 
-        assertEquals("User is not registered", statusCode, SC_FORBIDDEN);
+        assertEquals("User is registered without name",  SC_FORBIDDEN, statusCode);
     }
 }
