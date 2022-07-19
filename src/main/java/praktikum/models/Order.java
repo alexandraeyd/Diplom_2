@@ -1,4 +1,4 @@
-package praktikum;
+package praktikum.models;
 
 import java.util.List;
 

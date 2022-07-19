@@ -1,24 +1,28 @@
-package praktikum;
+package praktikum.client;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
+import praktikum.client.BurgerRestClient;
+import praktikum.models.Order;
+
 import static io.restassured.RestAssured.given;
 import java.util.List;
 
 
 
-public class OrderClient extends BurgerRestClient{
+public class OrderClient extends BurgerRestClient {
 
     private static final String USER_PATH = "orders";
     private List<String> actualIngredients;
+    private final String INGREDIENTS_PATH = "ingredients";
 
 
     public OrderClient() {
 
-        String path = "ingredients";
+
         actualIngredients = given()
                 .spec(getBaseSpec())
                 .when()
-                .get(path)
+                .get(INGREDIENTS_PATH)
                 .jsonPath()
                 .getList("data._id");
 
@@ -31,26 +35,24 @@ public class OrderClient extends BurgerRestClient{
   @Step("Send POST request to /api/orders with token")
     public ValidatableResponse createWithToken(Order order, String token){
 
-        String path = USER_PATH;
         return given()
                 .spec(getBaseSpec())
                 .auth().oauth2(token)
                 .body(order)
                 .when()
-                .post(path)
+                .post(USER_PATH)
                 .then();
 
     }
 
     @Step("Send POST request to /api/orders without token")
-    public ValidatableResponse createWithoutToken(Order order, String token){
+    public ValidatableResponse createWithoutToken(Order order){
 
-        String path = USER_PATH;
         return given()
                 .spec(getBaseSpec())
                 .body(order)
                 .when()
-                .post(path)
+                .post(USER_PATH)
                 .then();
 
     }
@@ -58,12 +60,11 @@ public class OrderClient extends BurgerRestClient{
    @Step("Send GET request to /api/orders")
     public ValidatableResponse getOrdersWithToken(String token){
 
-        String path = USER_PATH;
         return given()
                 .spec(getBaseSpec())
                 .auth().oauth2(token)
                 .when()
-                .get(path)
+                .get(USER_PATH)
                 .then();
 
     }
@@ -71,11 +72,10 @@ public class OrderClient extends BurgerRestClient{
     @Step("Send GET request to /api/orders without token")
     public ValidatableResponse getOrdersWithoutToken(){
 
-        String path = USER_PATH;
         return given()
                 .spec(getBaseSpec())
                 .when()
-                .get(path)
+                .get(USER_PATH)
                 .then();
 
     }

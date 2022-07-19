@@ -5,6 +5,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import io.qameta.allure.junit4.DisplayName;
+import praktikum.client.UserClient;
+import praktikum.models.User;
+import praktikum.utils.DataGenerator;
 
 
 import static org.apache.http.HttpStatus.*;
@@ -42,7 +45,6 @@ public class UpdateUserTest {
         user = DataGenerator.getRandomUser();
         ValidatableResponse response = userClient.updateWithoutToken(user);
         int statusCode = response.extract().statusCode();
-        String msg = response.extract().path("message");
         assertEquals("User is updated without token",  SC_UNAUTHORIZED, statusCode);
 
     }

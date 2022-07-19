@@ -1,9 +1,11 @@
-package praktikum;
+package praktikum.client;
 import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 import io.qameta.allure.Step;
+import praktikum.client.BurgerRestClient;
+import praktikum.models.User;
 
-public class UserClient extends BurgerRestClient{
+public class UserClient extends BurgerRestClient {
 
     private static final String USER_PATH = "auth/";
 
@@ -63,7 +65,6 @@ public class UserClient extends BurgerRestClient{
     @Step("Send DELETE request to /api/auth/user")
     public ValidatableResponse delete(String token){
 
-        String path = USER_PATH +"user";
         return given()
                 .spec(getBaseSpec())
                 .auth().oauth2(token)

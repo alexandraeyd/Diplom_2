@@ -3,23 +3,25 @@ package praktikum;
 
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import praktikum.client.OrderClient;
+import praktikum.client.UserClient;
+import praktikum.models.User;
+import praktikum.utils.DataGenerator;
 
 import static org.apache.http.HttpStatus.*;
 import static org.junit.Assert.assertEquals;
 
 public class GetUserOrdersTest {
 
-    OrderClient orderClient;
-    UserClient userClient;
-    User user;
-    String accessToken;
+    private static OrderClient orderClient;
+    private static UserClient userClient;
+    private static User user;
+    private static String accessToken;
 
 
-    @Before
-    public void setUp(){
+    @BeforeClass
+    public static void setUp(){
         orderClient = new OrderClient();
         userClient = new UserClient();
         user = DataGenerator.getRandomUser();
@@ -48,8 +50,8 @@ public class GetUserOrdersTest {
         assertEquals("Orders are returned without token", SC_UNAUTHORIZED, statusCode);
     }
 
-    @After
-    public void tearDown(){
+    @AfterClass
+    public static void tearDown(){
         userClient.delete(accessToken);
     }
 }

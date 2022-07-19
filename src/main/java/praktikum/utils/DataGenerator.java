@@ -1,5 +1,8 @@
-package praktikum;
+package praktikum.utils;
 import org.apache.commons.lang3.RandomStringUtils;
+import praktikum.client.OrderClient;
+import praktikum.models.Order;
+import praktikum.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +53,6 @@ public class DataGenerator {
     }
 
     public static Order getEmptyOrder() {
-        OrderClient orderClient = new OrderClient();
         List<String> orderIngredients = new ArrayList<String>();
         return new Order(orderIngredients);
     }
